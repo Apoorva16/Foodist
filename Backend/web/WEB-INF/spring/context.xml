@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns:beans ="http://www.springframework.org/schema/beans"
+        xmlns:security="http://www.springframework.org/schema/security"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.springframework.org/schema/beans
+	    http://www.springframework.org/schema/beans/spring-beans.xsd
+	    http://www.springframework.org/schema/security
+	    http://www.springframework.org/schema/security/spring-security-4.0.xsd">
+
+    <security:http use-expressions="true" realm="FoodistAPIServlet" create-session="stateless">
+        <security:intercept-url pattern="/**" access="hasRole('ROLE_USER')" />
+        <!-- Try removing this later -->
+        <security:http-basic />
+    </security:http>
+
+    <security:authentication-manager>
+        <security:authentication-provider>
+            <!-- Try changing queries later -->
+            <security:jdbc-user-service id="userService" data-source-ref="dataSource"
+                 users-by-username-query="SELECT USERID, APITOKEN, ENABLED FROM USERS WHERE USERID = ?"
+                 authorities-by-username-query="SELECT USERID, AUTHORITY FROM USERS WHERE USERID = ?"
+            />
+        </security:authentication-provider>
+    </security:authentication-manager>
+</beans:beans>

@@ -1,0 +1,5 @@
+Backend.iml
+Backend/.idea/*
+Frontend/.idea/*
+Backend/out/*
+Frontend/out/*

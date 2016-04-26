@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns:beans ="http://www.springframework.org/schema/beans"
+        xmlns:security="http://www.springframework.org/schema/security"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.springframework.org/schema/beans
+	    http://www.springframework.org/schema/beans/spring-beans.xsd
+	    http://www.springframework.org/schema/security
+	    http://www.springframework.org/schema/security/spring-security-4.0.xsd">
+
+    <security:http use-expressions="true" realm="FoodistWebApp">
+        <security:intercept-url pattern="/login.html" access="permitAll" />
+        <security:intercept-url pattern="/css/login.css" access="permitAll" />
+        <security:intercept-url pattern="/images/**" access="permitAll" />
+        <security:intercept-url pattern="/**" access="hasRole('ROLE_USER')" />
+        <!--<security:http-basic />-->
+        <security:form-login
+                login-page="/login.html"
+                default-target-url="/index.html"
+                authentication-failure-url="/login.html" />
+        <security:logout logout-success-url="/login.html" />
+    </security:http>
+
+    <security:authentication-manager>
+        <security:authentication-provider>
+            <!-- Try changing queries later -->
+            <security:jdbc-user-service id="userService" data-source-ref="dataSource"
+                 users-by-username-query="SELECT USERNAME, PASSWORD, ENABLED FROM USERS WHERE USERNAME = ?"
+                 authorities-by-username-query="SELECT USERNAME, AUTHORITY FROM USERS WHERE USERNAME = ?"
+            />
+        </security:authentication-provider>
+    </security:authentication-manager>
+</beans:beans>

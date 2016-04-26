@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <!-- jQuery -->
+    <script src="../bower_components/jquery/dist/jquery.min.js" type="text/javascript"></script>
+
+    <!-- Bootstrap dependencies -->
+    <link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap.min.css">
+    <script src="../bower_components/bootstrap/dist/js/bootstrap.min.js" type="text/javascript"></script>
+
+    <link rel="stylesheet" href="css/login.css">
+</head>
+<body>
+
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12">
+            <div id="login-wrapper" class="col-lg-3 col-md-4 col-sm-12 col-xs-12">
+                <div class="form">
+                    <img class="app-logo" src="images/logo.png">
+                    <br>
+                    <br>
+                    <span class="register-form">
+                        <input type="text" placeholder="name"/>
+                        <input type="password" placeholder="password"/>
+                        <input type="text" placeholder="email address"/>
+                        <button>create</button>
+                        <p class="message">Already registered? <a href="#">Login</a></p>
+                    </span>
+                    <span class="login-form">
+                        <input type="text" placeholder="username"/>
+                        <input type="password" placeholder="password"/>
+                        <button onclick="login()">login</button>
+                        <p class="message">Not registered? <a href="#">Create an account</a></p>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $('.message a').click(function(){
+            $('span').animate({height: "toggle", opacity: "toggle"}, "slow");
+        });
+
+        function login() {
+            window.location.href = "index.html";
+        }
+    </script>
+</body>
+</html>
