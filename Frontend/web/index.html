@@ -36,10 +36,10 @@
                         </a>
                     </li>
                     <li>
-                        <a href="#"><img class="user-image" src="images/user-image.jpg"></a>
+                        <a href="#"><img class="user-image" ng-src="{{userInfo.imageUrl}}"></a>
                     </li>
                     <li>
-                        <a href="#">Apoorva Parmar</a>
+                        <a href="#">{{userInfo | displayFullName}}</a>
                     </li>
                     <li>
                         <!--<a onclick="showDashboard()" class="clickable"><i class="fa fa-list" aria-hidden="true"></i> Dashboard</a>-->
@@ -55,7 +55,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="./login.html">
+                        <a href="login.html">
                             <i class="fa fa-sign-out"></i>
                             Logout
                         </a>
@@ -124,29 +124,7 @@
                                 </table>
                             </div>
                         </div>
-
-                        <div class="row">
-                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-
-                                <table class="table">
-                                    <thead class="thead-inverse">
-                                        <tr>
-                                            <th>MealId</th>
-                                            <th>MealType</th>
-                                        </tr>
-                                    </thead>
-                                <tbody>
-                                    <tr ng-repeat="meal in mealtypes">
-                                        <td>{{meal.id}}</td>
-                                        <td>{{meal.type}}</td>
-                                    </tr>
-                                </tbody>
-                                </table>
-                            </div>
-                        </div>
-
                     </div>
-
 
                     <div id="card-wrapper" class="row" ng-show="tabIndex == 1">
                         <div id="sort-group" class="row">
@@ -179,7 +157,7 @@
                                         </div>
                                         <div class="footer">
                                             <div class="rating">
-                                                <i class="fa fa-mail-forward"></i> Auto Rotation
+                                                <i class="fa fa-mail-forward"></i> Flip
                                             </div>
                                         </div>
                                     </div>

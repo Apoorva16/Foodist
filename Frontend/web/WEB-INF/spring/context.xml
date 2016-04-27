@@ -5,27 +5,38 @@
         xsi:schemaLocation="http://www.springframework.org/schema/beans
 	    http://www.springframework.org/schema/beans/spring-beans.xsd
 	    http://www.springframework.org/schema/security
-	    http://www.springframework.org/schema/security/spring-security-4.0.xsd">
+	    http://www.springframework.org/schema/security/spring-security-3.2.xsd">
 
-    <security:http use-expressions="true" realm="FoodistWebApp">
-        <security:intercept-url pattern="/login.html" access="permitAll" />
+    <security:http use-expressions="true">
+        <!-- For the login page -->
+        <security:intercept-url pattern="/login.html*" access="permitAll" />
         <security:intercept-url pattern="/css/login.css" access="permitAll" />
+        <security:intercept-url pattern="/js/Utility.js" access="permitAll" />
         <security:intercept-url pattern="/images/**" access="permitAll" />
+        <security:intercept-url pattern="/bower_components/jquery/dist/jquery.min.js" access="permitAll" />
+        <security:intercept-url pattern="/bower_components/bootstrap/dist/css/bootstrap.min.css" access="permitAll" />
+        <security:intercept-url pattern="/bower_components/bootstrap/dist/js/bootstrap.min.js" access="permitAll" />
+        <!-- For everything else -->
         <security:intercept-url pattern="/**" access="hasRole('ROLE_USER')" />
-        <!--<security:http-basic />-->
+
         <security:form-login
                 login-page="/login.html"
                 default-target-url="/index.html"
-                authentication-failure-url="/login.html" />
-        <security:logout logout-success-url="/login.html" />
+                authentication-failure-url="/login.html?error=true"
+                always-use-default-target="true"
+        />
+        <security:logout
+                logout-success-url="/login.html"
+        />
     </security:http>
 
     <security:authentication-manager>
         <security:authentication-provider>
+            <security:password-encoder hash="sha"/>
             <!-- Try changing queries later -->
             <security:jdbc-user-service id="userService" data-source-ref="dataSource"
-                 users-by-username-query="SELECT USERNAME, PASSWORD, ENABLED FROM USERS WHERE USERNAME = ?"
-                 authorities-by-username-query="SELECT USERNAME, AUTHORITY FROM USERS WHERE USERNAME = ?"
+                 users-by-username-query="SELECT USERNAME, PASSWORD, ENABLED FROM USERS WHERE USERNAME = ?;"
+                 authorities-by-username-query="SELECT USERNAME, AUTHORITY FROM USERS WHERE USERNAME = ?;"
             />
         </security:authentication-provider>
     </security:authentication-manager>

@@ -15,6 +15,21 @@ function showDashboard() {
 (function() {
     var module = angular.module('TheFoodist', []);
 
+    module.config(['$httpProvider', function($httpProvider) {
+        $httpProvider.defaults.useXDomain = true;
+        $httpProvider.defaults.withCredentials = true;
+        delete $httpProvider.defaults.headers.common["X-Requested-With"];
+        $httpProvider.defaults.headers.common["Accept"] = "application/json";
+        $httpProvider.defaults.headers.common["Content-Type"] = "application/json";
+        $httpProvider.defaults.headers.common['Authorization'] = getAuthString();
+    }]);
+
+    module.filter('displayFullName', function() {
+        return function(userInfoObj) {
+            return userInfoObj.firstName + " " + userInfoObj.lastName;
+        }    
+    });
+    
     module.controller('MainController', ['$scope', '$timeout', '$http', function ($scope, $timeout, $http) {
         
         /* AP: Index 0 = tableView, Index 1 = cardView */
@@ -25,10 +40,23 @@ function showDashboard() {
         
         $scope.searchQuery = "";
 
+        $scope.userInfo = {};
         $scope.listOfItems = [];
-        $scope.mealtypes = [];
-        
-        $http.defaults.headers.common['Authorization'] = getAuthString();
+
+        $scope.getUserInfo = function() {
+            $http({
+                url: getAPIURL() + "/user-info",
+                method: "GET"
+            }).success(function(data, status, headers, config) {
+                if(data.userInfo != undefined && data.userInfo != null) {
+                    $scope.userInfo = data.userInfo;
+                }
+            }).error(function (data, status, headers, config) {
+                //alert("Something went wrong");
+            });
+        };
+
+        $scope.getUserInfo();
 
         $scope.getListOfItems = function() {
             $http({
@@ -37,8 +65,6 @@ function showDashboard() {
             }).success(function(data, status, headers, config) {
                 if(data != null && data.items != undefined && data.items != null) {
                     $scope.listOfItems = data.items;
-
-                    //$scope.$apply();
 
                     $timeout(function (){
                         $("#card-wrapper").isotope({
@@ -67,27 +93,11 @@ function showDashboard() {
                     }, 500);
                 }
             }).error(function (data, status, headers, config) {
-                alert("Something went wrong");
-            });
-        };
-
-        $scope.getMealTypes = function() {
-            $http({
-                url: getAPIURL() + "/meal",
-                method: "GET"
-            }).success(function(data, status, headers, config) {
-                if(data != null && data.mealtypes != undefined && data.mealtypes != null) {
-                    $scope.mealtypes = data.mealtypes;
-
-                    //$scope.$apply();
-                }
-            }).error(function (data, status, headers, config) {
-                alert("Something went wrong here");
+                //alert("Something went wrong");
             });
         };
         
         $scope.getListOfItems();
-        $scope.getMealTypes();
 
         $scope.sortByPopular = function() {
             if($scope.sortIndex != 0) {

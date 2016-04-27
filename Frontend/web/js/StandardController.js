@@ -1,4 +1,4 @@
-/*PD: Making a dummy template for an Angular Controller, do not use this file directly in the project */
+/*AP: Making a dummy template for an Angular Controller, do not use this file directly in the project */
 
 (function() {
 

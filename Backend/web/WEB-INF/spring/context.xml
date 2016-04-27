@@ -8,6 +8,8 @@
 	    http://www.springframework.org/schema/security/spring-security-4.0.xsd">
 
     <security:http use-expressions="true" realm="FoodistAPIServlet" create-session="stateless">
+        <security:intercept-url pattern="/**" method="OPTIONS" access="permitAll" />
+        <security:intercept-url pattern="/api/register" access="permitAll" />
         <security:intercept-url pattern="/**" access="hasRole('ROLE_USER')" />
         <!-- Try removing this later -->
         <security:http-basic />
@@ -17,8 +19,8 @@
         <security:authentication-provider>
             <!-- Try changing queries later -->
             <security:jdbc-user-service id="userService" data-source-ref="dataSource"
-                 users-by-username-query="SELECT USERID, APITOKEN, ENABLED FROM USERS WHERE USERID = ?"
-                 authorities-by-username-query="SELECT USERID, AUTHORITY FROM USERS WHERE USERID = ?"
+                 users-by-username-query="SELECT USERID, APITOKEN, ENABLED FROM USERS WHERE USERID = ?;"
+                 authorities-by-username-query="SELECT USERID, AUTHORITY FROM USERS WHERE USERID = ?;"
             />
         </security:authentication-provider>
     </security:authentication-manager>

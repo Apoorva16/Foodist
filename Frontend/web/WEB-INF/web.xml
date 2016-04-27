@@ -34,5 +34,12 @@
         <filter-name>springSecurityFilterChain</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
-
+    <filter>
+        <filter-name>APITokenFilter</filter-name>
+        <filter-class>filters.APIToken</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>APITokenFilter</filter-name>
+        <url-pattern>/index.html</url-pattern>
+    </filter-mapping>
 </web-app>

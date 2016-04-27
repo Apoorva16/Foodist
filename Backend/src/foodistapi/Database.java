@@ -33,13 +33,23 @@ public class Database {
         return sqlHandler.grabStringResults();
     }
 
-    protected String[][] get_all_meals() {
-        String sql =
-               " SELECT MEAL_ID, TYPE FROM MEALS AS M;" ;
-        sqlHandler.execute(sql);
-        return sqlHandler.grabStringResults();
+    protected String[] get_user_info(Integer userId) {
+        String sql = "SELECT FNAME, LNAME, IMAGEURL FROM USERS WHERE USERID = ?";
+        sqlHandler.execute(sql, userId);
+        return sqlHandler.grabFirstColumn(); //PD: TODO Rename this to grabFirstRow
     }
 
+    protected boolean insert_user(String firstName, String lastName, String imageUrl, String username, String password, String apiToken, String authority, Boolean enabled) {
+        String sql = "INSERT INTO USERS (FNAME, LNAME, IMAGEURL, USERNAME, PASSWORD, APITOKEN, AUTHORITY, ENABLED) VALUES (?,?,?,?,SHA(?),?,?,?)";
+        return sqlHandler.execute(sql, firstName, lastName, imageUrl, username, password, apiToken, authority, enabled);
+    }
+
+    protected boolean check_user_duplicateApiToken(String apiToken) {
+        String sql =
+                "SELECT USERID FROM USERS WHERE APITOKEN = ?";
+        sqlHandler.execute(sql, apiToken);
+        return sqlHandler.getNumRows() > 0;
+    }
 }
 
 

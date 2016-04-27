@@ -1,16 +1,17 @@
-<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Login</title>
     <!-- jQuery -->
-    <script src="../bower_components/jquery/dist/jquery.min.js" type="text/javascript"></script>
+    <script src="bower_components/jquery/dist/jquery.min.js" type="text/javascript"></script>
 
     <!-- Bootstrap dependencies -->
-    <link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap.min.css">
-    <script src="../bower_components/bootstrap/dist/js/bootstrap.min.js" type="text/javascript"></script>
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
+    <script src="bower_components/bootstrap/dist/js/bootstrap.min.js" type="text/javascript"></script>
 
     <link rel="stylesheet" href="css/login.css">
+
+    <script src="js/Utility.js" type="text/javascript"></script>
 </head>
 <body>
 
@@ -21,32 +22,61 @@
                     <img class="app-logo" src="images/logo.png">
                     <br>
                     <br>
-                    <span class="register-form">
-                        <input type="text" placeholder="name"/>
-                        <input type="password" placeholder="password"/>
-                        <input type="text" placeholder="email address"/>
-                        <button>create</button>
+                    <form class="register-form">
+                        <input id="new-fullname" type="text" placeholder="name"/>
+                        <input id="new-password" type="password" placeholder="password"/>
+                        <input id="new-email" type="text" placeholder="email address"/>
+                        <button id="create-button">create</button>
                         <p class="message">Already registered? <a href="#">Login</a></p>
-                    </span>
-                    <span class="login-form">
-                        <input type="text" placeholder="username"/>
-                        <input type="password" placeholder="password"/>
-                        <button onclick="login()">login</button>
+                    </form>
+                    <form class="login-form" name="login" id="login" method="POST" action="j_spring_security_check">
+                        <input type="text" placeholder="username" id="j_username" name="j_username"  required="required"/>
+                        <input type="password" placeholder="password" id="j_password" name="j_password" required="required"/>
+                        <button id="login-button">login</button>
                         <p class="message">Not registered? <a href="#">Create an account</a></p>
-                    </span>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        $('.message a').click(function(){
-            $('span').animate({height: "toggle", opacity: "toggle"}, "slow");
-        });
+        $(document).ready(function() {
+            $('.message a').click(function(){
+                $('form').animate({height: "toggle", opacity: "toggle"}, "slow");
+            });
 
-        function login() {
-            window.location.href = "index.html";
-        }
+            $('#create-button').click(function () {
+
+                var postObject = {
+                    username: $('#new-email').val(),
+                    fullname: $('#new-fullname').val(),
+                    password: $('#new-password').val()
+                };
+
+                $.ajax(
+                    {
+                        type: "POST",
+                        headers: {
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json'
+                        },
+                        dataType: 'json',
+                        data: JSON.stringify(postObject),
+                        url: getAPIURL() + "/register",
+                        success: function(response) {
+
+                            $('#j_username').val(postObject.username);
+                            $('#j_password').val(postObject.password);
+                            $('#login-button').click();
+                        },
+                        error: function (response) {
+                            alert("Account creation failed!");
+                        }
+                    });
+            })
+
+        });
     </script>
 </body>
 </html>
